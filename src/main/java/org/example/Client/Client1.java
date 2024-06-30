@@ -24,6 +24,7 @@ public class Client1
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
             System.out.println("----- WELCOME TO FILTRA SERVER -----");
+            //Send control command from client to server
             sendCommandToServer();
 
         } catch (IOException e)
