@@ -33,19 +33,19 @@ public class AccountController
 
     public static boolean createUser(User new_user) throws SQLException
     {
-        String register_query = "INSERT INTO users (username, password, email, fullname, date_created, anonymous, activated, blocked, id_role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String register_query = "INSERT INTO users (id, username, password, email, fullname, date_created, anonymous, activated, id_role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps;
         try
         {
             ps = connection.prepareStatement(register_query);
-            ps.setString(1, new_user.getUsername());
-            ps.setString(2, new_user.getPassword());
-            ps.setString(3, new_user.getEmail());
-            ps.setString(4, new_user.getFullname());
-            ps.setString(5, new_user.getDate_created());
-            ps.setBoolean(6, new_user.isAnonymous());
-            ps.setBoolean(7, new_user.isActivated());
-            ps.setBoolean(8, new_user.isBlocked());
+            ps.setString(1, new_user.getId());
+            ps.setString(2, new_user.getUsername());
+            ps.setString(3, new_user.getPassword());
+            ps.setString(4, new_user.getEmail());
+            ps.setString(5, new_user.getFullname());
+            ps.setString(6, new_user.getDate_created());
+            ps.setBoolean(7, new_user.isAnonymous());
+            ps.setBoolean(8, new_user.isActivated());
             ps.setInt(9, new_user.getId_role());
 
         } catch (SQLException e)
@@ -70,7 +70,6 @@ public class AccountController
         try (Connection con = DatabaseConnector.connectToDatabase();
              PreparedStatement ps = con.prepareStatement(query))
         {
-
             ps.setString(1, username);
             ps.setString(2, email);
             ResultSet rs = ps.executeQuery();
@@ -102,6 +101,7 @@ public class AccountController
         {
             System.out.println("LOGIN SUCCESS! USER: " + rs.getString("username"));
             user_login = new User(
+                    rs.getString("id"),
                     rs.getString("fullname"),
                     rs.getString("username"),
                     rs.getString("email"),
@@ -109,7 +109,6 @@ public class AccountController
                     rs.getString("date_created"),
                     rs.getBoolean("anonymous"),
                     rs.getBoolean("activated"),
-                    rs.getBoolean("blocked"),
                     rs.getInt("id_role")
             );
             return user_login;

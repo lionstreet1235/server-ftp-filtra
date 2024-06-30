@@ -11,6 +11,9 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Random;
 
+import java.util.UUID;
+
+
 public class ControlThread extends Thread
 {
     private final BufferedReader in;
@@ -159,12 +162,12 @@ public class ControlThread extends Thread
             //blocked = false
             //id_role = 2 (normal client) >< 1 (admin)
             User new_user = new User(
+                    UUID.randomUUID().toString(),
                     fullname,
                     username,
                     email, password,
                     LocalDateTime.now().toString(),
                     true,
-                    false,
                     false,
                     2);
             if (AccountController.createUser(new_user))
@@ -227,7 +230,7 @@ public class ControlThread extends Thread
                 out.println("STARTING DOWNLOAD ...");
                 ServerSocket serverDataSocket = new ServerSocket(DATA_PORT);
                 Socket clientDataSocket = serverDataSocket.accept();
-                Thread dataThread = new DataThread(clientDataSocket, file_down, "GET");
+                Thread dataThread = new DataThread(clientDataSocket, file_down, "GET", user_login);
                 dataThread.start();
                 serverDataSocket.close();
             } catch (IOException e)
@@ -256,8 +259,9 @@ public class ControlThread extends Thread
         out.println("STARTING UPLOAD ...");
         ServerSocket serverDataSocket = new ServerSocket(DATA_PORT);
         Socket clientDataSocket = serverDataSocket.accept();
-        Thread dataThread = new DataThread(clientDataSocket, upload_file, "UP");
+        Thread dataThread = new DataThread(clientDataSocket, upload_file, "UP", user_login);
         dataThread.start();
+
         serverDataSocket.close();
     }
 
