@@ -2,6 +2,17 @@ package org.example.Model;
 
 public class User
 {
+    public String getId()
+    {
+        return id;
+    }
+
+    public void setId(String id)
+    {
+        this.id = id;
+    }
+
+    private String id;
     private String fullname;
     private String username;
     private String email;
@@ -98,8 +109,9 @@ public class User
     }
 
 
-    public User(String fullname, String username, String email, String password, String date_created, boolean anonymous, boolean activated, boolean blocked, int id_role)
+    public User(String id, String fullname, String username, String email, String password, String date_created, boolean anonymous, boolean activated, int id_role)
     {
+        this.id = id;
         this.fullname = fullname;
         this.username = username;
         this.email = email;
@@ -107,7 +119,6 @@ public class User
         this.date_created = date_created;
         this.anonymous = anonymous;
         this.activated = activated;
-        this.blocked = blocked;
         this.id_role = id_role;
     }
 

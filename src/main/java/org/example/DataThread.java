@@ -1,20 +1,25 @@
 package org.example;
 
+import org.example.Controller.FileController;
+import org.example.Model.User;
+
 import java.io.*;
 import java.net.Socket;
+import java.sql.SQLException;
 
 public class DataThread extends Thread
 {
     Socket dataSocket;
     File file;
     String command;
+    User user_login;
 
-
-    public DataThread(Socket dataSocket, File file, String command) throws IOException
+    public DataThread(Socket dataSocket, File file, String command, User user_login) throws IOException
     {
         this.dataSocket = dataSocket;
         this.file = file;
         this.command = command.toUpperCase();
+        this.user_login = user_login;
     }
 
     @Override
@@ -70,8 +75,10 @@ public class DataThread extends Thread
             {
                 out.write(buffer, 0, bytesRead);
             }
+
             out.flush();
-        } catch (IOException e)
+            FileController.uploadFile(user_login, file);
+        } catch (IOException | SQLException e)
         {
             System.out.println(e.getMessage());
         } finally
