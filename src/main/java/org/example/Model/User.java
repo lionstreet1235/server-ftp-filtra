@@ -1,0 +1,123 @@
+package org.example.Model;
+
+public class User
+{
+    private String fullname;
+    private String username;
+    private String email;
+    private String password;
+    private final String date_created;
+    private boolean anonymous;
+    private boolean activated;
+    private boolean blocked;
+    private int id_role;
+
+    public String getDate_created()
+    {
+        return date_created;
+    }
+
+    public boolean isActivated()
+    {
+        return activated;
+    }
+
+    public void setActivated(boolean activated)
+    {
+        this.activated = activated;
+    }
+
+    public boolean isBlocked()
+    {
+        return blocked;
+    }
+
+    public void setBlocked(boolean blocked)
+    {
+        this.blocked = blocked;
+    }
+
+    public int getId_role()
+    {
+        return id_role;
+    }
+
+    public void setId_role(int id_role)
+    {
+        this.id_role = id_role;
+    }
+
+    public boolean isAnonymous()
+    {
+        return anonymous;
+    }
+
+    public void setAnonymous(boolean anonymous)
+    {
+        this.anonymous = anonymous;
+    }
+
+    public String getFullname()
+    {
+        return fullname;
+    }
+
+    public void setFullname(String fullname)
+    {
+        this.fullname = fullname;
+    }
+
+    public String getUsername()
+    {
+        return username;
+    }
+
+    public void setUsername(String username)
+    {
+        this.username = username;
+    }
+
+    public String getEmail()
+    {
+        return email;
+    }
+
+    public void setEmail(String email)
+    {
+        this.email = email;
+    }
+
+    public String getPassword()
+    {
+        return password;
+    }
+
+    public void setPassword(String password)
+    {
+        this.password = password;
+    }
+
+
+    public User(String fullname, String username, String email, String password, String date_created, boolean anonymous, boolean activated, boolean blocked, int id_role)
+    {
+        this.fullname = fullname;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.date_created = date_created;
+        this.anonymous = anonymous;
+        this.activated = activated;
+        this.blocked = blocked;
+        this.id_role = id_role;
+    }
+
+    public String toString()
+    {
+        return "User{\nfullname: " + this.fullname + ",\n"
+                + "username: " + this.username + ",\n"
+                + "email: " + this.email + ",\n"
+                + "password: " + this.password + ",\n"
+                + "datecreate: " + this.date_created + ",\n"
+                + "anonymous: " + this.anonymous + "}";
+    }
+}
