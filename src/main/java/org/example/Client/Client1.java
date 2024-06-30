@@ -65,6 +65,9 @@ public class Client1
                     case "REG":
                         register();
                         break;
+                    case "OTP":
+                        sentEmail();
+                        break;
                     case "GET":
                         downloadFile();
                         break;
@@ -84,12 +87,27 @@ public class Client1
         }
     }
 
+    private static void sentEmail() throws IOException {
+        String rs=in.readLine();
+        if (rs.contains("ERROR")) {
+            System.out.println(rs);
+            return;
+
+        }
+        System.out.println(rs);
+        System.out.println("--OTP FORM--");
+        System.out.print("Your OTP: ");
+        String otpNumber = scanner.nextLine();
+        out.println(otpNumber);
+        //
+        String act_email = in.readLine();
+        System.out.println("OTP is valid  "+ act_email);
+    }
     private static void logout() throws IOException
     {
         String res = in.readLine();
         System.out.println(res);
     }
-
     private static void login() throws IOException
     {
         System.out.println("--- LOGIN ---");
@@ -102,7 +120,6 @@ public class Client1
         String res_login = in.readLine();
         System.out.println(res_login);
     }
-
     private static void register() throws IOException
     {
         String res = in.readLine();
