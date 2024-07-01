@@ -31,10 +31,6 @@ public class FileController
 
     public static void uploadFile(User user_upload, File upload_file) throws IOException, SQLException
     {
-//        System.out.println(user_upload.getUsername()
-//                + " upload a file "
-//                + Files.size(Path.of(String.valueOf(upload_file)))
-//                + " bytes");
         String query = "INSERT INTO files (id_file, id_user_upload, filename, filepath, filetype, upload_date, filesize) VALUES (?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps;
         try
@@ -54,7 +50,7 @@ public class FileController
         int new_row_file = ps.executeUpdate();
         if (new_row_file > 0)
         {
-            System.out.println(user_upload.getUsername() + " UPLOAD " + upload_file.getName() + " SUCCESS!");
+            System.out.println(user_upload.getUsername() + " UPLOAD '" + upload_file.getName() + "' SUCCESS!");
         } else
         {
             System.out.println("UPLOAD FAILED!");

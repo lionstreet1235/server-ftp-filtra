@@ -16,6 +16,8 @@ public class ControlThread extends Thread
     private final BufferedReader in;
     private static PrintWriter out;
     String control_command;
+    String[] commands;
+    String commander;
     final int DATA_PORT = 2000;
     User user_login = null;
     final String UPLOAD_DIRECTORY = "upload";
@@ -24,6 +26,7 @@ public class ControlThread extends Thread
     {
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         out = new PrintWriter(clientSocket.getOutputStream(), true);
+
     }
 
     @Override
@@ -38,12 +41,19 @@ public class ControlThread extends Thread
                 {
                     break;
                 }
-                if (control_command.contains("ls"))
+                commands = control_command.trim().split(" ");
+                commander = commands[0].toUpperCase();
+                if (commander.equals("LS"))
                 {
-                    showFileAndDirectory(control_command);
+                    showFileAndDirectory(commands);
                     continue;
                 }
-                switch (control_command)
+                if (commander.equals("MKDIR"))
+                {
+                    createDirectory(control_command);
+                    continue;
+                }
+                switch (commander)
                 {
                     case "LOG":
                         login();
@@ -80,6 +90,7 @@ public class ControlThread extends Thread
         }
     }
 
+
     private void logout()
     {
         if (user_login == null)
@@ -88,7 +99,7 @@ public class ControlThread extends Thread
             return;
         }
         System.out.println(user_login.getUsername() + " logout");
-        out.println("Goodbye " + user_login.getUsername() + "!");
+        out.println("See u again " + user_login.getUsername() + "!");
         user_login = null;
     }
 
@@ -241,7 +252,7 @@ public class ControlThread extends Thread
                 + user_login.getUsername()
                 + File.separator
                 + filename);
-        if (!file.exists())
+        if (!file.exists() && !file.isDirectory())
         {
             return file.getAbsolutePath();
         }
@@ -256,34 +267,33 @@ public class ControlThread extends Thread
         }
 
         int count = 1;
-        while (file.exists())
+        while (file.exists() || file.isDirectory())
         {
-            String new_file_name = name + "(" + count + ")" + extension;
+            String newFileName = name + "(" + count + ")" + extension;
             file = new File(UPLOAD_DIRECTORY
                     + File.separator
                     + user_login.getUsername()
                     + File.separator
-                    + new_file_name);
+                    + newFileName);
             count++;
         }
         return file.getAbsolutePath();
     }
 
-    private void showFileAndDirectory(String control_command)
+    private void showFileAndDirectory(String[] commands)
     {
         if (user_login == null)
         {
             out.println("REQUIRED LOGIN FIRST!");
             return;
         }
-        String[] LS_parts = control_command.split(" ");
-        if (LS_parts.length == 1)
+        if (commands.length == 1)
         {
             File currentFolder = new File(UPLOAD_DIRECTORY + File.separator + user_login.getUsername());
             walk(currentFolder, currentFolder.getAbsolutePath().length());
-        } else if (LS_parts.length == 2)
+        } else if (commands.length == 2)
         {
-            String folderPath = UPLOAD_DIRECTORY + File.separator + user_login.getUsername() + File.separator + LS_parts[1];
+            String folderPath = UPLOAD_DIRECTORY + File.separator + user_login.getUsername() + File.separator + commands[1];
             File folder = new File(folderPath);
             if (folder.exists() && folder.isDirectory())
             {
@@ -315,6 +325,44 @@ public class ControlThread extends Thread
         } else
         {
             out.println("The folder is empty or cannot be read.");
+        }
+    }
+
+    private void createDirectory(String control_command) throws IOException
+    {
+        if (user_login == null)
+        {
+            out.println("REQUIRED LOGIN FIRST!");
+            return;
+        }
+
+        int firstSpaceIndex = control_command.indexOf(' ');
+        if (firstSpaceIndex == -1)
+        {
+            out.println("use 'MKDIR <directory-name>'");
+            return;
+        }
+
+        String directoryName = control_command.substring(firstSpaceIndex + 1).trim();
+        if (directoryName.isEmpty())
+        {
+            out.println("use 'MKDIR <directory-name>'");
+            return;
+        }
+
+
+        String uniqueDirectoryName = getUniqueFileName(directoryName);
+        File new_dir = new File(uniqueDirectoryName);
+
+        if (!new_dir.exists())
+        {
+            if (new_dir.mkdirs())
+            {
+                out.println("Create directory success!");
+            } else
+            {
+                out.println("Failed to create directory!");
+            }
         }
     }
 
