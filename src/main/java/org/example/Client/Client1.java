@@ -45,7 +45,11 @@ public class Client1
                 showFileAndDirectory(command);
                 continue;
             }
-
+            if (command_parts[0].equalsIgnoreCase("MKDIR"))
+            {
+                createDirectory(command);
+                continue;
+            }
             if (command.equalsIgnoreCase("QUIT"))
             {
                 socket.close();
@@ -87,6 +91,7 @@ public class Client1
         }
     }
 
+
     private static void sentEmail() throws IOException {
         String rs=in.readLine();
         if (rs.contains("REQUIRED")||rs.contains("activated!")) {
@@ -105,6 +110,14 @@ public class Client1
         String act_email = in.readLine();
         System.out.println( act_email);
     }
+
+    private static void createDirectory(String command) throws IOException
+    {
+        out.println(command);
+        System.out.println(in.readLine());
+    }
+
+
     private static void logout() throws IOException
     {
         String res = in.readLine();

@@ -1,4 +1,4 @@
-FTP Server
+FTP Server using Java and MySQL
 **(CONSOLE APP ONLY)**
 
 ***HOW TO TEST***
