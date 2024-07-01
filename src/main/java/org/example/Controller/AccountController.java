@@ -165,8 +165,6 @@ public class AccountController
             System.out.println("Failed to send OTP email. Error: " +mes.getMessage());
         }
 
-
-
     }
     //Cập nhật lại trạng thái activated
     public static boolean activateAccount(String otp_from_client, String otp_generated,String email) throws SQLException {
@@ -187,27 +185,27 @@ public class AccountController
     //Xem người dùng đã kích hoạt tài khoản hay chưa
     public static boolean isEmailActivated(String email) throws SQLException {
 
-            try (Connection conn = DatabaseConnector.connectToDatabase()) {
+        try (Connection conn = DatabaseConnector.connectToDatabase()) {
 
-                String query = "SELECT activated FROM users WHERE email = ?";
-                try (PreparedStatement stmt = conn.prepareStatement(query)) {
-                    stmt.setString(1, email);
-                    try (ResultSet rs = stmt.executeQuery()) {
-                        if (rs.next()) {
-                            boolean activated = rs.getBoolean("activated");
-                            if (activated) {
-                                System.out.println("User is Activated");
+            String query = "SELECT activated FROM users WHERE email = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setString(1, email);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        boolean activated = rs.getBoolean("activated");
+                        if (activated) {
+                            System.out.println("User is Activated");
 
-                                return true;
-                            } else {
-                                System.out.println("User is not Activated");
-                                return false;
-                            }
+                            return true;
                         } else {
-                            System.out.println("Email not found");
+                            System.out.println("User is not Activated");
                             return false;
                         }
+                    } else {
+                        System.out.println("Email not found");
+                        return false;
                     }
+                }
 
             }
 
