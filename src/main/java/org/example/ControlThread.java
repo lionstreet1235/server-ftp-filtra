@@ -86,29 +86,32 @@ public class ControlThread extends Thread
         }
     }
 
+    //Kiểm tra email đã kích hoạt chưa
     private void activateEmail() throws SQLException, IOException {
         if (user_login == null) {
-            out.println("ERROR: User not logged in!");
+            out.println("REQUIRED LOGIN FIRST!");
             return;
-
-        } else if (user_login != null && AccountController.isEmailActivated(user_login.getEmail())) {
-
-            out.println("Account already verified!");
+        } else if (AccountController.isEmailActivated(user_login.getEmail())) {
+            out.println("Email already activated!");
             return;
-        } else {
+        }
+        {
+            out.println();
             //Tạo otp
             Random numberOTP = new Random();
             int otp_random = numberOTP.nextInt(99999);
             String sendOTP = String.format("%05d", otp_random); // Đảm bảo OTP có 5 chữ số
             AccountController.sentEmail(user_login.getEmail(), sendOTP);
+
             //
             String otp_from_client = in.readLine();
             if (AccountController.activateAccount(otp_from_client, sendOTP, user_login.getEmail())) {
                 out.println("Verified OTP successfully!");
-            } else
+            } else {
                 out.println("OTP NOT VERIFIED!");
-
+            }
         }
+
     }
 
     private void logout()

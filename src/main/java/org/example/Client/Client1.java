@@ -89,11 +89,13 @@ public class Client1
 
     private static void sentEmail() throws IOException {
         String rs=in.readLine();
-        if (rs.contains("ERROR")) {
+        if (rs.contains("REQUIRED")||rs.contains("activated!")) {
             System.out.println(rs);
+            //Nếu chưa login thì bắt login
             return;
 
         }
+
         System.out.println(rs);
         System.out.println("--OTP FORM--");
         System.out.print("Your OTP: ");
@@ -101,7 +103,7 @@ public class Client1
         out.println(otpNumber);
         //
         String act_email = in.readLine();
-        System.out.println("OTP is valid  "+ act_email);
+        System.out.println( act_email);
     }
     private static void logout() throws IOException
     {
@@ -158,6 +160,7 @@ public class Client1
         //viet trang help cho client
         System.out.println("reg - register new account");
         System.out.println("log - login your account");
+        System.out.println("otp - verify your email");
         System.out.println("ls - show file on server (or use 'ls <folder-name>')");
         System.out.println("get - download file from server");
         System.out.println("up - upload file to server");
