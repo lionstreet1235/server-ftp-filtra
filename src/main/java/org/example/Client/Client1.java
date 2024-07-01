@@ -45,7 +45,11 @@ public class Client1
                 showFileAndDirectory(command);
                 continue;
             }
-
+            if (command_parts[0].equalsIgnoreCase("MKDIR"))
+            {
+                createDirectory(command);
+                continue;
+            }
             if (command.equalsIgnoreCase("QUIT"))
             {
                 socket.close();
@@ -82,6 +86,12 @@ public class Client1
             out.flush();
             System.out.println("---------------------------");
         }
+    }
+
+    private static void createDirectory(String command) throws IOException
+    {
+        out.println(command);
+        System.out.println(in.readLine());
     }
 
     private static void logout() throws IOException
