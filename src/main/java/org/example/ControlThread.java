@@ -41,18 +41,7 @@ public class ControlThread extends Thread
                 {
                     break;
                 }
-                commands = control_command.trim().split(" ");
                 commander = commands[0].toUpperCase();
-                if (commander.equals("LS"))
-                {
-                    showFileAndDirectory(commands);
-                    continue;
-                }
-                if (commander.equals("MKDIR"))
-                {
-                    createDirectory(control_command);
-                    continue;
-                }
                 switch (commander)
                 {
                     case "LOG":
@@ -66,6 +55,11 @@ public class ControlThread extends Thread
                         break;
                     case "UP":
                         uploadFile();
+                        break;
+                    case "LS":
+                        showFileAndDirectory(control_command);
+                    case "MKDIR":
+                        createDirectory(control_command);
                         break;
                     case "OUT":
                         logout();
@@ -280,20 +274,31 @@ public class ControlThread extends Thread
         return file.getAbsolutePath();
     }
 
-    private void showFileAndDirectory(String[] commands)
+    private void showFileAndDirectory(String control_command)
     {
         if (user_login == null)
         {
             out.println("REQUIRED LOGIN FIRST!");
             return;
         }
-        if (commands.length == 1)
+
+        int firstSpaceIndex = control_command.indexOf(' ');
+        if (firstSpaceIndex == -1)
         {
+
             File currentFolder = new File(UPLOAD_DIRECTORY + File.separator + user_login.getUsername());
             walk(currentFolder, currentFolder.getAbsolutePath().length());
-        } else if (commands.length == 2)
+        } else
         {
-            String folderPath = UPLOAD_DIRECTORY + File.separator + user_login.getUsername() + File.separator + commands[1];
+
+            String folderPath = control_command.substring(firstSpaceIndex + 1).trim();
+            if (folderPath.isEmpty())
+            {
+                out.println("The specified path is not a valid directory.");
+                return;
+            }
+
+            folderPath = UPLOAD_DIRECTORY + File.separator + user_login.getUsername() + File.separator + folderPath;
             File folder = new File(folderPath);
             if (folder.exists() && folder.isDirectory())
             {
@@ -303,6 +308,7 @@ public class ControlThread extends Thread
                 out.println("The specified path is not a valid directory.");
             }
         }
+
         out.println("EXIT");
     }
 
