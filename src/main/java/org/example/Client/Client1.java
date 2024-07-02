@@ -69,6 +69,9 @@ public class Client1
                     case "REG":
                         register();
                         break;
+                    case "OTP":
+                        sentEmail();
+                        break;
                     case "GET":
                         downloadFile();
                         break;
@@ -88,18 +91,38 @@ public class Client1
         }
     }
 
+
+    private static void sentEmail() throws IOException {
+        String rs=in.readLine();
+        if (rs.contains("REQUIRED")||rs.contains("activated!")) {
+            System.out.println(rs);
+            //Nếu chưa login thì bắt login
+            return;
+
+        }
+
+        System.out.println(rs);
+        System.out.println("--OTP FORM--");
+        System.out.print("Your OTP: ");
+        String otpNumber = scanner.nextLine();
+        out.println(otpNumber);
+        //
+        String act_email = in.readLine();
+        System.out.println( act_email);
+    }
+
     private static void createDirectory(String command) throws IOException
     {
         out.println(command);
         System.out.println(in.readLine());
     }
 
+
     private static void logout() throws IOException
     {
         String res = in.readLine();
         System.out.println(res);
     }
-
     private static void login() throws IOException
     {
         System.out.println("--- LOGIN ---");
@@ -112,7 +135,6 @@ public class Client1
         String res_login = in.readLine();
         System.out.println(res_login);
     }
-
     private static void register() throws IOException
     {
         String res = in.readLine();
@@ -151,6 +173,7 @@ public class Client1
         //viet trang help cho client
         System.out.println("reg - register new account");
         System.out.println("log - login your account");
+        System.out.println("otp - verify your email");
         System.out.println("ls - show file on server (or use 'ls <folder-name>')");
         System.out.println("get - download file from server");
         System.out.println("up - upload file to server");
